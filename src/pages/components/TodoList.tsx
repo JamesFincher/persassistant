@@ -2,14 +2,22 @@ import React from "react";
 
 type Props = {
   testing: boolean;
+  todoData: [];
 };
 
 const TodoList = (props: Props) => {
-  const { testing } = props;
+  const { testing = "", todoData = [] } = props;
+  if (todoData.isLoading) {
+    return <div>Loading...</div>;
+  }
   return (
     <div>
       <h1>Todo List</h1>
-      <p>Testing: {testing ? "true" : "false"}</p>
+      <ul>
+        {todoData.data.map((todo) => (
+          <li key={todo.id}>{todo.title}</li>
+        ))}
+      </ul>
     </div>
   );
 };

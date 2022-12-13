@@ -8,7 +8,10 @@ import TodoList from "./components/TodoList";
 
 const Home: NextPage = () => {
   const hello = trpc.example.hello.useQuery({ text: "from tRPC" });
+  const todos = trpc.todo.getTodo.useQuery();
+  const { data: sessionData } = useSession();
 
+  console.log(todos.data);
   return (
     <>
       <Head>
@@ -17,6 +20,8 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
+        {sessionData && <TodoList testing={true} todoData={todos} />}
+
         <div className="flex flex-col items-center justify-center gap-4 text-white">
           <AuthShowcase />
         </div>
@@ -42,7 +47,6 @@ const AuthShowcase: React.FC = () => {
         {secretMessage && <span> - {secretMessage}</span>}
         {!sessionData && <span>Not logged in</span>}
       </p>
-      {sessionData && <TodoList testing={true} />}
       <button
         className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
         onClick={sessionData ? () => signOut() : () => signIn()}
